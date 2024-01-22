@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Bulaale1/tinyyapp/issues"
   },
-  "homepage": "https://github.com/Bulaale1/tinyyapp#readme"
+  "homepage": "https://github.com/Bulaale1/tinyyapp#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
