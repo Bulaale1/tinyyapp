@@ -4,11 +4,11 @@ const app = express();
 const PORT = 8080; // default port 8080
 app.set("view engine", "ejs"); //set ejs as a view engine
 
-app.use(express.urlencoded({ extended: true }));// Middleware to parse incoming URL-encoded form data 
+app.use(express.urlencoded({ extended: true }));// Middleware to parse incoming URL-encoded form data
 //with extended option set to true.
 // Generates a random string of specified length using alphanumeric characters.👇🏽👇🏽👇🏽
 const generateRandomString = function(number) {
-  let aplphanumber = 'abcdefghijklmnopkrstuvdxwz1234567890';
+  let aplphanumber = 'abcdefghijklmnopqrstuvwxyz1234567890';
   let result = '';
   for (let index = 0; index < number; index++) {
     result += aplphanumber.charAt(Math.floor(Math.random() * aplphanumber.length));
@@ -41,9 +41,15 @@ app.get("/u/:id", (req, res) => {
 
   res.redirect(longURL);
 });
-//Handle POST request for '/urls' and render to the newly created link
+// handles a POST request to '/urls'.checks if the request body contains a valid 'longURL',
+// and if not, it sends an appropriate response.
 app.post("/urls", (req, res) => {
   const id = generateRandomString(6);
+  if (req.body.longURL === undefined) {
+    res.send('please Enter url');
+  } else if (req.body.longURL === ' ') {
+    res.send('Empty link is not acceptable');
+  }
   urlDatabase[id] = req.body.longURL;
   console.log(urlDatabase);
   res.redirect(`/urls/${id}`);
