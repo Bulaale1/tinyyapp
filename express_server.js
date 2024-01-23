@@ -34,10 +34,20 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
+  res.redirect('/u/:id');
+  
+});
+app.get("/u/:id", (req, res) => {
+  const longURL = req.body.longURL;
+  res.redirect(longURL);
 });
 app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  //console.log(req.body); // Log the POST request body to the console
+  const id = generateRandomString(6);
+  urlDatabase[id] = req.body.longURL;
+  console.log(urlDatabase);
+  res.redirect('/urls');
+  // res.redirect('/urls/:id.'); // Respond with 'Ok' (we will replace this)
 });
 
 app.listen(PORT, () => {
