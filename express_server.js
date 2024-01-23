@@ -12,7 +12,6 @@ const generateRandomString = function(number) {
   let result = '';
   for (let index = 0; index < number; index++) {
     result += aplphanumber.charAt(Math.floor(Math.random() * aplphanumber.length));
-    //const userId = Math.random().toString(36).substring(2,15);
   }
   return result;
 };
@@ -34,19 +33,20 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
   res.render("urls_show", templateVars);
-  res.redirect('/u/:id');
   
 });
 app.get("/u/:id", (req, res) => {
-  const longURL = req.body.longURL;
+  const id = req.params.id;
+  const longURL = urlDatabase[id];
+
   res.redirect(longURL);
 });
+//Handle POST request for '/urls' and render to the newly created link
 app.post("/urls", (req, res) => {
-  //console.log(req.body); // Log the POST request body to the console
   const id = generateRandomString(6);
   urlDatabase[id] = req.body.longURL;
   console.log(urlDatabase);
-  res.redirect(`/urls/${id}`); // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/${id}`);
 });
 
 app.listen(PORT, () => {
