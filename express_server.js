@@ -66,6 +66,13 @@ app.post("/urls/:id",(req, res) => {
   urlDatabase[idToUpdate] = req.body.newURL;
   res.redirect('/urls');
 });
+// POST endpoint to handle login form submission
+
+app.post('/login', (req, res) => {
+  const username = req.body.username; // Change req.params.username to req.body.username
+  console.log(`a user named  ${username} submitted a form `);
+  res.redirect('/urls');
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
