@@ -7,6 +7,7 @@ app.set("view engine", "ejs"); //set ejs as a view engine
 
 app.use(express.urlencoded({ extended: true }));// Middleware to parse incoming URL-encoded form data
 //with extended option set to true.
+app.use(cookieParser());
 // Generates a random string of specified length using alphanumeric characters.👇🏽👇🏽👇🏽
 const generateRandomString = function(number) {
   let aplphanumber = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -21,12 +22,7 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
-app.get("/urls", (req, res) => {
-  const templateVars = { username: req.cookies["username"],
-    urls: urlDatabase };
-  res.render("urls_index", templateVars);
-});
+
 
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new", (req, res) => {
@@ -76,7 +72,12 @@ app.post('/login', (req, res) => {
   res.cookie('username', username);
   res.redirect('/urls');
 });
-
+// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
+app.get("/urls", (req, res) => {
+  const templateVars = { urls: urlDatabase,
+    username: req.cookies["username"] || req.cookies["test"]  };
+  res.render("urls_index", templateVars);
+});
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
