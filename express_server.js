@@ -70,7 +70,7 @@ app.post("/urls/:id",(req, res) => {
 
 app.post('/login', (req, res) => {
   const username = req.body.username; // Change req.params.username to req.body.username
-  console.log(`a user named  ${username} submitted a form `);
+  res.cookie('username', username);
   res.redirect('/urls');
 });
 
