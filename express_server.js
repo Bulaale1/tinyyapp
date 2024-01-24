@@ -1,11 +1,18 @@
 /* eslint-disable linebreak-style */
-const express = require("express"); // require the express library
+// Requires / Packages
+const express = require("express");
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+
+//// Set-up / Configrations
 const app = express();
 const PORT = 8080; // default port 8080
-app.set("view engine", "ejs"); //set ejs as a view engine
+app.set("view engine", "ejs");
 
-app.use(express.urlencoded({ extended: true }));// Middleware to parse incoming URL-encoded form data
-//with extended option set to true.
+//Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+app.use(cookieParser());
 // Generates a random string of specified length using alphanumeric characters.👇🏽👇🏽👇🏽
 const generateRandomString = function(number) {
   let aplphanumber = 'abcdefghijklmnopqrstuvwxyz1234567890';
@@ -20,18 +27,18 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
-app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
-});
+
+
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = {
+    username: req.cookies["username"]};
+  res.render("urls_new",templateVars);
 });
 // Handle GET request for "/urls/:id" endpoint, rendering the "urls_show" view
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]};
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]};
   res.render("urls_show", templateVars);
   
 });
@@ -66,7 +73,24 @@ app.post("/urls/:id",(req, res) => {
   urlDatabase[idToUpdate] = req.body.newURL;
   res.redirect('/urls');
 });
+// POST endpoint to handle login form submission
 
+app.post('/login', (req, res) => {
+  const username = req.body.username; // get username from req.body.username
+  res.cookie('username', username);
+  res.redirect('/urls');
+});
+app.post('/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/urls');
+});
+
+// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
+app.get("/urls", (req, res) => {
+  const templateVars = { urls: urlDatabase,
+    username: req.cookies["username"]};
+  res.render("urls_index", templateVars);
+});
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
