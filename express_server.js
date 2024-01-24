@@ -72,6 +72,11 @@ app.post('/login', (req, res) => {
   res.cookie('username', username);
   res.redirect('/urls');
 });
+app.post('/logout', (req, res) => {
+  res.clearCookie('username');
+  res.redirect('/urls');
+});
+
 // Handle GET request for "/urls" endpoint, rendering the "urls_index" view
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase,
