@@ -2,6 +2,7 @@
 const express = require("express"); // require the express library
 const app = express();
 const PORT = 8080; // default port 8080
+const cookieParser = require('cookie-parser');
 app.set("view engine", "ejs"); //set ejs as a view engine
 
 app.use(express.urlencoded({ extended: true }));// Middleware to parse incoming URL-encoded form data
@@ -22,9 +23,11 @@ const urlDatabase = {
 };
 // Handle GET request for "/urls" endpoint, rendering the "urls_index" view
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = { username: req.cookies["username"],
+    urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
+
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
@@ -69,7 +72,7 @@ app.post("/urls/:id",(req, res) => {
 // POST endpoint to handle login form submission
 
 app.post('/login', (req, res) => {
-  const username = req.body.username; // Change req.params.username to req.body.username
+  const username = req.body.username; // get username from req.body.username
   res.cookie('username', username);
   res.redirect('/urls');
 });
