@@ -20,13 +20,12 @@
         </form>
       </p>
       <% } else { %>
-      <!-- <p>You are not logged in</p> -->
-      <form method="POST" action="/login">
-        <input type="text" name="email" placeholder="Enter your username">
-        <button type="submit">Login</button>
-      </form>
-      <% } %>
-    </h3>
+      <h3>New to this page? <a href="/register">registration page</a> instead<h3></h3>
+
+        <h3>Returning user ? <a href="/login">Login</a> instead</h3>
+
+        <% } %>
+      </h3>
 
   </nav>
 </header>

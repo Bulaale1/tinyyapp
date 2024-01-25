@@ -39,13 +39,57 @@ const users = {
     password: "6789",
   },
 };
+// GET /login
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// POST /login
+app.post('/login', (req, res) => {
+  // pull the info off the body
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // did they NOT provide a email and password?
+  if (!email || !password) {
+    return res.status(400).send('Please provide a email and password');
+  }
+
+  // lookup the user based on their email
+  let foundUser = null;
+
+  for (const userId in users) {
+    const user = users[userId];
+    if (user.email === email) {
+      foundUser = user;
+    }
+  }
+
+  // did we NOT find a user?
+  if (!foundUser) {
+    return res.status(400).send('no user with that email found');
+  }
+
+  // do the passwords NOT match
+  if (foundUser.password !== password) {
+    return res.status(400).send('passwords do not match');
+  }
+
+  // yay! happy path!
+
+  // set a cookie
+  res.cookie('userId', foundUser.id);
+
+  // redirect the user somewhere
+  res.redirect('/urls');
+});
 // GET /register
 app.get('/register',(req,res)=>{
   res.render('register');
 });
 // GET /register
 app.post('/register',(req,res)=>{
-  const userId = generateRandomString(3);
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -72,7 +116,7 @@ app.post('/register',(req,res)=>{
   // the email is unique!
 
   // create a new user object
-  // const id = Math.random().toString(36).substring(2, 5);
+  const userId = generateRandomString(3);
 
   const user = {
     id: userId,
@@ -82,11 +126,19 @@ app.post('/register',(req,res)=>{
 
   users[userId] = user;
 
-  console.log(users);
   res.cookie('userId',user.id);
   res.redirect('/urls');
 });
-
+// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
+app.get("/urls", (req, res) => {
+  const userId = req.cookies["userId"];
+  const user = users[userId];
+  const templateVars = {
+    user,
+    urls: urlDatabase,
+  };
+  res.render("urls_index", templateVars);
+});
 
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new", (req, res) => {
@@ -114,8 +166,8 @@ app.get("/u/:id", (req, res) => {
 
   res.redirect(longURL);
 });
-// handles a POST request to '/urls'.checks if the request body contains a valid 'longURL',
-// and if not, it sends an appropriate response.
+/*handles a POST request to '/urls'.checks if the request body contains a valid 'longURL',
+and if not, it sends an appropriate response.*/
 app.post("/urls", (req, res) => {
   const id = generateRandomString(6);
   if (req.body.longURL === undefined) {
@@ -146,7 +198,7 @@ app.post('/login', (req, res) => {
   const userId = req.cookies["userId"];
   const user = users[userId];
   console.log(user[userId]);
-  res.cookie('email', user[userId]);
+  res.cookie('userId',user.id);
   res.redirect('/urls');
 });
 app.post('/logout', (req, res) => {
@@ -157,16 +209,7 @@ app.post('/logout', (req, res) => {
   res.redirect('/urls');
 });
 
-// Handle GET request for "/urls" endpoint, rendering the "urls_index" view
-app.get("/urls", (req, res) => {
-  const userId = req.cookies["userId"];
-  const user = users[userId];
-  const templateVars = {
-    urls: urlDatabase,
-    user,
-  };
-  res.render("urls_index", templateVars);
-});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
