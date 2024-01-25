@@ -13,13 +13,13 @@
 
     </div>
     <h3>
-      <% if (user.email) { %>
+      <% if (user) { %>
       <p>Logged in as: <%= user.email %>
         <form action="/logout" method="post">
           <input type="submit" value="Logout">
         </form>
       </p>
-      <% } else if(user.email===undefined){ %>
+      <% } if(!user) { %>
       <h3>New to this page? <a href="/register">registration page</a> instead<h3></h3>
 
         <h3>Returning user ? <a href="/login">Login page</a> instead</h3>

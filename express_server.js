@@ -196,7 +196,7 @@ app.post('/logout', (req, res) => {
   const user = users[userId];
   console.log(user);
   res.clearCookie(["userId"]);
-  res.redirect('/urls');
+  res.redirect('/register');
 });
 
 
