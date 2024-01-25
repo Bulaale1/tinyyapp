@@ -13,8 +13,8 @@
 
     </div>
     <h3>
-      <% if (username) { %>
-      <p>Logged in as: <%= username %>
+      <% if (user.email) { %>
+      <p>Logged in as: <%= user.email %>
         <form action="/logout" method="post">
           <input type="submit" value="Logout">
         </form>
@@ -22,7 +22,7 @@
       <% } else { %>
       <!-- <p>You are not logged in</p> -->
       <form method="POST" action="/login">
-        <input type="text" name="username" placeholder="Enter your username">
+        <input type="text" name="email" placeholder="Enter your username">
         <button type="submit">Login</button>
       </form>
       <% } %>

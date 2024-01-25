@@ -27,22 +27,55 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+const users = {
+  abc: {
+    id: "abc",
+    email: "abc@gmail.com",
+    password: "12345",
+  },
+  bcd: {
+    id: "cde",
+    email: "abc@example.com",
+    password: "6789",
+  },
+};
 // GET /register
 app.get('/register',(req,res)=>{
   res.render('register');
+});
+// GET /register
+app.post('/register',(req,res)=>{
+  const userId = generateRandomString(3);
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = {
+    id :userId,
+    email:email,
+    password:password
+  };
+  users[userId] = user;
+  res.cookie('userId',user.id);
+  res.redirect('/urls');
 });
 
 
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new", (req, res) => {
+  const userId = req.cookies["userId"];
+  const user = users[userId];
+  console.log(user);
   const templateVars = {
-    username: req.cookies["username"]};
+    user,
+    // username: req.cookies["username"]
+  };
   res.render("urls_new",templateVars);
 });
 // Handle GET request for "/urls/:id" endpoint, rendering the "urls_show" view
 app.get("/urls/:id", (req, res) => {
+  const userId = req.cookies["userId"];
+  const user = users[userId];
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id],
-    username: req.cookies["username"]};
+    user};
   res.render("urls_show", templateVars);
   
 });
@@ -80,19 +113,29 @@ app.post("/urls/:id",(req, res) => {
 // POST endpoint to handle login form submission
 
 app.post('/login', (req, res) => {
-  const username = req.body.username; // get username from req.body.username
-  res.cookie('username', username);
+  // const username = req.body.username; // get username from req.body.username
+  const userId = req.cookies["userId"];
+  const user = users[userId];
+  console.log(user[userId]);
+  res.cookie('username', user[userId]);
   res.redirect('/urls');
 });
 app.post('/logout', (req, res) => {
-  res.clearCookie('username');
+  const userId = req.cookies["userId"];
+  const user = users[userId];
+  console.log(user);
+  res.clearCookie(["userId"]);
   res.redirect('/urls');
 });
 
 // Handle GET request for "/urls" endpoint, rendering the "urls_index" view
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase,
-    username: req.cookies["username"]};
+  const userId = req.cookies["userId"];
+  const user = users[userId];
+  const templateVars = {
+    urls: urlDatabase,
+    user:user,
+  };
   res.render("urls_index", templateVars);
 });
 app.listen(PORT, () => {
