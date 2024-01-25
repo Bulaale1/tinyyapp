@@ -191,16 +191,6 @@ app.post("/urls/:id",(req, res) => {
   urlDatabase[idToUpdate] = req.body.newURL;
   res.redirect('/urls');
 });
-// POST endpoint to handle login form submission
-
-app.post('/login', (req, res) => {
-  // const email = req.body.email; // get email from req.body.email
-  const userId = req.cookies["userId"];
-  const user = users[userId];
-  console.log(user[userId]);
-  res.cookie('userId',user.id);
-  res.redirect('/urls');
-});
 app.post('/logout', (req, res) => {
   const userId = req.cookies["userId"];
   const user = users[userId];

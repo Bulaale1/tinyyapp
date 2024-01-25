@@ -19,10 +19,10 @@
           <input type="submit" value="Logout">
         </form>
       </p>
-      <% } else { %>
+      <% } else if(user.email===undefined){ %>
       <h3>New to this page? <a href="/register">registration page</a> instead<h3></h3>
 
-        <h3>Returning user ? <a href="/login">Login</a> instead</h3>
+        <h3>Returning user ? <a href="/login">Login page</a> instead</h3>
 
         <% } %>
       </h3>
