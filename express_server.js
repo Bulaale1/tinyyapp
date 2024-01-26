@@ -13,7 +13,6 @@ app.set("view engine", "ejs");
 //Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-// app.use(cookieParser());
 app.use(cookieSession({
   name:  'session',
   keys: ['tinyapp'],
@@ -27,8 +26,6 @@ const generateRandomString = function(number) {
   }
   return result;
 };
-// urlDatabase[id]
-// urlDatabase[id].longUrl
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -154,7 +151,6 @@ app.post('/register',(req,res)=>{
   // req.session.userId = foundUser.id;
   res.redirect('/urls');
 });
-//below
 // Handle GET request for "/urls" endpoint, rendering the "urls_index" view
 app.get("/urls", (req, res) => {
   const userId = req.session.userId;
