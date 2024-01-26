@@ -12,22 +12,18 @@
       </div>
 
     </div>
-    <h3>
-      <% if (user) { %>
-      <p>Logged in as: <%= user.email %>
-        <form action="/logout" method="post">
-          <input type="submit" value="Logout">
-        </form>
-      </p>
-      <% } if(!user) { %>
-      <nav>
-        <h3><a href="/register">Registration page</a></h3>
 
-        <h3><a href="/login">Login page</a></h3>
-      </nav>
-
+    <% if (user) { %>
+    <p>Logged in as: <%= user.email %>
+      <form action="/logout" method="post">
+        <input type="submit" value="Logout">
+      </form>
+    </p>
+    <% } if(!user) { %>
+    <nav>
+      <a href="/login">login</a>
+      <a href="/register">registeter</a>
       <% } %>
-    </h3>
-
+    </nav>
   </nav>
 </header>

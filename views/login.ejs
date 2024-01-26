@@ -9,22 +9,24 @@
 
 <body>
 
-  <h1>User Login</h1>
-  
+  <h1>Login</h1>
+
   <h3>New here? Visit the <a href="/register">registration page</a> instead<h3></h3>
 
-  <form method="POST" action="/login">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
+    <form method="POST" action="/login">
+      <label for="email">Email address</label>
+      <br>
+      <input type="email" id="email" name="email" placeholder="Enter Email ">
 
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
+      <br>
+      <label for="password">Password</label>
+      <br>
+      <input type="password" id="password" name="password" placeholder="Enter password">
 
-    <br>
+      <br>
 
-    <button type="submit">Login</button>
-  </form>
+      <button type="submit">Login</button>
+    </form>
 
 </body>
 
