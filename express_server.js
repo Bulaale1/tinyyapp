@@ -4,7 +4,7 @@ const express = require("express");
 let cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
-const  getUserByEmail  = require('./helper');
+const  getUserByEmail  = require('./helpers');
 //// Set-up / Configrations
 const app = express();
 const PORT = 8080; // default port 8080
