@@ -4,8 +4,8 @@ const express = require("express");
 let cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
-const  getUserByEmail  = require('./helpers');
-const  generateRandomString = require('./helpers');
+
+const { getUserByEmail, generateRandomString } = require('./helpers');
 //// Set-up / Configrations
 const app = express();
 const PORT = 8080; // default port 8080
@@ -96,6 +96,7 @@ app.post('/login', (req, res) => {
 });
 // GET /register
 app.get('/register',(req,res)=>{
+
   res.render('register');
 });
 // post/register
@@ -119,6 +120,7 @@ app.post('/register',(req,res)=>{
 
   // create a new user object email is unique!
   const userId = generateRandomString(3);
+
   const hash = bcrypt.hashSync(password, salt);
 
   const user = {
@@ -132,6 +134,7 @@ app.post('/register',(req,res)=>{
  
   // set a cookie using cookie-session package
   req.session.userId = user.id;
+
   res.redirect('/urls');
 });
 // Handle GET request for "/urls" endpoint, rendering the "urls_index" view
@@ -151,8 +154,9 @@ app.get("/urls", (req, res) => {
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new",(req, res) => {
   const userId = req.session.userId;
+
   const user = users[userId];
-  console.log(user);
+
   if (user) {
     const templateVars = {
       user,
@@ -168,7 +172,9 @@ app.get("/urls/new",(req, res) => {
 // Handle GET request for "/urls/:id" endpoint, rendering the "urls_show" view
 app.get("/urls/:id", (req, res) => {
   const userId = req.session.userId;
+
   const user = users[userId];
+
   const id = req.params.id;
   //display proper message if the user tries to enter invalid short url ID
   if (urlDatabase[id] === undefined) {
@@ -182,10 +188,13 @@ app.get("/urls/:id", (req, res) => {
 });
 app.get("/u/:id", (req, res) => {
   const id = req.params.id;
+
   const longURL = urlDatabase[id].longUrl;
+
   console.log(urlDatabase);
   
   if (urlDatabase[id] === undefined) {
+
     res.send('<html><body><p>URL does not exist.</p></body></html>');
   }
   res.redirect(longURL);
@@ -195,6 +204,7 @@ app.get("/u/:id", (req, res) => {
 and if not, it sends an appropriate response.*/
 
 app.post("/urls",(req, res) => {
+
   const id = generateRandomString(6);
 
   const userId = req.session.userId;
@@ -214,7 +224,7 @@ app.post("/urls",(req, res) => {
 app.post("/urls/:id/delete",(req,res)=>{
   const idToDelete = req.params.id;
   if (urlDatabase[idToDelete] === undefined) {
-    
+
     res.send('<html><body><p>You trying to delete invalid link id.</p></body></html>');
   }
   delete urlDatabase[idToDelete];
