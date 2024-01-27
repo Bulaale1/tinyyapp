@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 const assert = require('chai').assert;
 
-const  getUserByEmail  = require('../helper');
+const  getUserByEmail  = require('../helpers');
 
 const testUsers = {
   "userRandomID": {
@@ -23,11 +23,8 @@ describe('getUserByEmail', function() {
 
     assert.equal(user.id, expectedUserID);
   });
-  it('should return a user with valid email', function() {
+  it('should return undefined when an invalid email is provided', function() {
     const user = getUserByEmail("user@egoogle.com", testUsers);
-    const expectedUserID = "userRandomID";
-    // Write your assert statement here
-    //.equal(actual, expected, [message])
-    assert.notEqual(user, expectedUserID);
+    assert.isUndefined(user);
   });
 });
