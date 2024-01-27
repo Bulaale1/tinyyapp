@@ -80,7 +80,7 @@ app.post('/login', (req, res) => {
 
   // do the passwords NOT match
   const result = bcrypt.compareSync(password, foundUser.password);
-  // (foundUser.password !== password)
+
   if (!result) {
     return res.status(400).send('passwords do not match');
   }
@@ -259,11 +259,8 @@ app.post("/urls/:id",(req, res) => {
 
   res.redirect('/urls');
 });
-//if user logout, redirect to login page
+//if user logout,delete the cookies and  redirect to login page
 app.post('/logout', (req, res) => {
-  const userId = req.session.userId;
-  const user = users[userId];
-  console.log(user.id);
   req.session = null;
   res.redirect('/login');
 });
@@ -272,17 +269,3 @@ app.post('/logout', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-/*
-In your app.get("/urls/:id") and app.get("/u/:id") routes,
-you're checking if the URL exists in the urlDatabase. If it doesn't,
- you're sending a response to the client. This is good, but you can also add a check to see if the URL belongs to the logged-in user.
- If it doesn't, you can send a response saying that the user doesn't have access to this URL.
-
-Similarly, in your app.post("/urls/:id") and app.post("/urls/:id/delete") routes, you should add a check to see if the URL belongs to the logged-in user before updating or deleting the URL. If the URL doesn't belong to the user, you can send a response saying that the user doesn't have permission to perform this action.
-
-In your app.post("/urls") route, you're checking if the user is logged in after generating a random string for the short URL. You can check if the user is logged in before generating the short URL to avoid unnecessary computations.
-
-Keep up the good work!
-
-*/
