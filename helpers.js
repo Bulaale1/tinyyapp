@@ -9,4 +9,14 @@ const getUserByEmail = function(email, database) {
   return undefined; // Return undefined if no user is found with the specified email
 };
 
-module.exports = getUserByEmail;
+const generateRandomString = function(number) {
+  let aplphanumber = 'abcdefghijklmnopqrstuvwxyz1234567890';
+  let result = '';
+  for (let index = 0; index < number; index++) {
+    result += aplphanumber.charAt(Math.floor(Math.random() * aplphanumber.length));
+  }
+  return result;
+};
+
+
+module.exports = {getUserByEmail,generateRandomString};

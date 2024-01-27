@@ -5,6 +5,7 @@ let cookieSession = require('cookie-session');
 const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 const  getUserByEmail  = require('./helpers');
+const  generateRandomString = require('./helpers');
 //// Set-up / Configrations
 const app = express();
 const PORT = 8080; // default port 8080
@@ -17,15 +18,7 @@ app.use(cookieSession({
   name:  'session',
   keys: ['tinyapp'],
 }));
-// Generates a random string of specified length using alphanumeric characters.👇🏽👇🏽👇🏽
-const generateRandomString = function(number) {
-  let aplphanumber = 'abcdefghijklmnopqrstuvwxyz1234567890';
-  let result = '';
-  for (let index = 0; index < number; index++) {
-    result += aplphanumber.charAt(Math.floor(Math.random() * aplphanumber.length));
-  }
-  return result;
-};
+
 const urlsForUser = function(id) {
   const userURLs = {};
   for (const shortURL in urlDatabase) {
@@ -221,6 +214,7 @@ app.post("/urls",(req, res) => {
 app.post("/urls/:id/delete",(req,res)=>{
   const idToDelete = req.params.id;
   if (urlDatabase[idToDelete] === undefined) {
+    
     res.send('<html><body><p>You trying to delete invalid link id.</p></body></html>');
   }
   delete urlDatabase[idToDelete];
@@ -228,10 +222,11 @@ app.post("/urls/:id/delete",(req,res)=>{
 });
 //post for Editing existing Url
 app.post("/urls/:id",(req, res) => {
-  // urlDatabase[id].longUrl
+
   const idToUpdate = req.params.id;
 
   urlDatabase[idToUpdate].longURL = req.body.newURL;
+
   res.redirect('/urls');
 });
 //if user logout, redirect to login page
