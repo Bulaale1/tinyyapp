@@ -169,15 +169,13 @@ app.get("/urls/new",(req, res) => {
 // Handle GET request for "/urls/:id" endpoint, rendering the "urls_show" view
 app.get("/urls/:id", (req, res) => {
   const userId = req.session.userId;
-  console.log(userId);
   const user = users[userId];
-  console.log(user.id);
   const id = req.params.id;
   //display proper message if the user tries to enter invalid short url ID
   if (urlDatabase[id] === undefined) {
     res.status(404).send('<html><body><p>URL does not exist.</p></body></html>');
   }
-  if (userId !== user.id) {
+  if (userId !== urlDatabase[id].userID) {
     res.send('You don\'t have access for this urls');
   }
 
@@ -188,13 +186,9 @@ app.get("/urls/:id", (req, res) => {
   
 });
 app.get("/u/:id", (req, res) => {
-  const userId = req.session.userId;
-
   const id = req.params.id;
 
   const longURL = urlDatabase[id].longUrl;
-
-  console.log(urlDatabase);
   
   if (urlDatabase[id] === undefined) {
 
