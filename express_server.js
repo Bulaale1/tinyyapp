@@ -200,9 +200,6 @@ app.get("/u/:id", (req, res) => {
 
     res.send('<html><body><p>URL does not exist.</p></body></html>');
   }
-  if (userId !== urlDatabase[id].userID) {
-    res.send('You don\'t have access for this urls');
-  }
   res.redirect(longURL);
 });
 
