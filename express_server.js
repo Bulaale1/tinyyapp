@@ -169,14 +169,18 @@ app.get("/urls/new",(req, res) => {
 // Handle GET request for "/urls/:id" endpoint, rendering the "urls_show" view
 app.get("/urls/:id", (req, res) => {
   const userId = req.session.userId;
-
+  console.log(userId);
   const user = users[userId];
-
+  console.log(user.id);
   const id = req.params.id;
   //display proper message if the user tries to enter invalid short url ID
   if (urlDatabase[id] === undefined) {
     res.status(404).send('<html><body><p>URL does not exist.</p></body></html>');
   }
+  if (userId !== user.id) {
+    res.send('You don\'t have access for this urls');
+  }
+
   const templateVars = { id: req.params.id, longURL: urlDatabase[id].longURL,
     user};
 
@@ -184,6 +188,9 @@ app.get("/urls/:id", (req, res) => {
   
 });
 app.get("/u/:id", (req, res) => {
+  const userId = req.session.userId;
+  const user = users[userId];
+
   const id = req.params.id;
 
   const longURL = urlDatabase[id].longUrl;
@@ -194,6 +201,9 @@ app.get("/u/:id", (req, res) => {
 
     res.send('<html><body><p>URL does not exist.</p></body></html>');
   }
+  if (userId !== user.id) {
+    res.send('You don\'t have access for this urls');
+  }
   res.redirect(longURL);
 });
 
@@ -202,15 +212,14 @@ and if not, it sends an appropriate response.*/
 
 app.post("/urls",(req, res) => {
 
-  const id = generateRandomString(6);
-
   const userId = req.session.userId;
 
   const user = users[userId];
-
+  //check if the user is logged in
   if (!user) {
     res.status(401).send('You must logged in to shorten URLs.');
   }
+  const id = generateRandomString(6);
   urlDatabase[id] = {
     longURL: req.body.longURL,
     userID : userId,
@@ -219,11 +228,17 @@ app.post("/urls",(req, res) => {
 });
 //Delete function
 app.post("/urls/:id/delete",(req,res)=>{
+  const userId = req.session.userId;
+  const user = users[userId];
   const idToDelete = req.params.id;
 
   if (urlDatabase[idToDelete] === undefined) {
 
     res.status(404).send('URL does not exist.');
+  }
+  //check if the user is the owner of that link before deleting it
+  if (userId !== user.id) {
+    res.send('You don\'t have permission to perform this action');
   }
   delete urlDatabase[idToDelete];
 
@@ -232,7 +247,12 @@ app.post("/urls/:id/delete",(req,res)=>{
 });
 //post for Editing existing Url
 app.post("/urls/:id",(req, res) => {
-
+  const userId = req.session.userId;
+  const user = users[userId];
+  //check if the user is the owner of that link before editing it
+  if (userId !== user.id) {
+    res.send('You don\'t have permission to perform this action');
+  }
   const idToUpdate = req.params.id;
 
   urlDatabase[idToUpdate].longURL = req.body.newURL;
@@ -252,3 +272,17 @@ app.post('/logout', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+/*
+In your app.get("/urls/:id") and app.get("/u/:id") routes,
+you're checking if the URL exists in the urlDatabase. If it doesn't,
+ you're sending a response to the client. This is good, but you can also add a check to see if the URL belongs to the logged-in user.
+ If it doesn't, you can send a response saying that the user doesn't have access to this URL.
+
+Similarly, in your app.post("/urls/:id") and app.post("/urls/:id/delete") routes, you should add a check to see if the URL belongs to the logged-in user before updating or deleting the URL. If the URL doesn't belong to the user, you can send a response saying that the user doesn't have permission to perform this action.
+
+In your app.post("/urls") route, you're checking if the user is logged in after generating a random string for the short URL. You can check if the user is logged in before generating the short URL to avoid unnecessary computations.
+
+Keep up the good work!
+
+*/
