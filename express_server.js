@@ -23,10 +23,7 @@ const urlsForUser = function(id) {
   const userURLs = {};
   for (const shortURL in urlDatabase) {
     if (urlDatabase[shortURL].userID === id) {
-      userURLs[shortURL] = {
-        longURL: urlDatabase[shortURL].longURL,
-        userID:id
-      };
+      userURLs[shortURL] = urlDatabase[shortURL];
     }
   }
   return userURLs;
@@ -231,7 +228,7 @@ app.post("/urls/:id/delete",(req,res)=>{
   delete urlDatabase[idToDelete];
 
   res.redirect("/urls");
-  
+
 });
 //post for Editing existing Url
 app.post("/urls/:id",(req, res) => {
