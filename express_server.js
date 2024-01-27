@@ -189,7 +189,6 @@ app.get("/urls/:id", (req, res) => {
 });
 app.get("/u/:id", (req, res) => {
   const userId = req.session.userId;
-  const user = users[userId];
 
   const id = req.params.id;
 
@@ -201,7 +200,7 @@ app.get("/u/:id", (req, res) => {
 
     res.send('<html><body><p>URL does not exist.</p></body></html>');
   }
-  if (userId !== user.id) {
+  if (userId !== urlDatabase[id].userID) {
     res.send('You don\'t have access for this urls');
   }
   res.redirect(longURL);
@@ -229,7 +228,7 @@ app.post("/urls",(req, res) => {
 //Delete function
 app.post("/urls/:id/delete",(req,res)=>{
   const userId = req.session.userId;
-  const user = users[userId];
+  const id = req.params.id;
   const idToDelete = req.params.id;
 
   if (urlDatabase[idToDelete] === undefined) {
@@ -237,7 +236,7 @@ app.post("/urls/:id/delete",(req,res)=>{
     res.status(404).send('URL does not exist.');
   }
   //check if the user is the owner of that link before deleting it
-  if (userId !== user.id) {
+  if (userId !== urlDatabase[id].userID) {
     res.send('You don\'t have permission to perform this action');
   }
   delete urlDatabase[idToDelete];
@@ -248,13 +247,11 @@ app.post("/urls/:id/delete",(req,res)=>{
 //post for Editing existing Url
 app.post("/urls/:id",(req, res) => {
   const userId = req.session.userId;
-  const user = users[userId];
+  const idToUpdate = req.params.id;
   //check if the user is the owner of that link before editing it
-  if (userId !== user.id) {
+  if (userId !== urlDatabase[idToUpdate].userID) {
     res.send('You don\'t have permission to perform this action');
   }
-  const idToUpdate = req.params.id;
-
   urlDatabase[idToUpdate].longURL = req.body.newURL;
 
   res.redirect('/urls');
