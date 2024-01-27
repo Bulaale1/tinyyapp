@@ -212,7 +212,7 @@ app.post("/urls",(req, res) => {
   const user = users[userId];
 
   if (!user) {
-    res.status(401).send('<html><body><p>You must be logged in to shorten URLs.</p></body></html>');
+    res.status(401).send('You must logged in to shorten URLs.');
   }
   urlDatabase[id] = {
     longURL: req.body.longURL,
@@ -223,12 +223,15 @@ app.post("/urls",(req, res) => {
 //Delete function
 app.post("/urls/:id/delete",(req,res)=>{
   const idToDelete = req.params.id;
+
   if (urlDatabase[idToDelete] === undefined) {
 
-    res.send('<html><body><p>You trying to delete invalid link id.</p></body></html>');
+    res.status(404).send('URL does not exist.');
   }
   delete urlDatabase[idToDelete];
+
   res.redirect("/urls");
+  
 });
 //post for Editing existing Url
 app.post("/urls/:id",(req, res) => {
