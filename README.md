@@ -1,7 +1,7 @@
 
 ## TinyApp
 
-TinyApp is a simple URL shortening fullstack web application built with Express, EJS, JavaScript, and HTML. This project allows users to easily convert long URLs into concise and shareable short URLs.
+TinyApp is a simple URL shortening fullstack web application built with Express, EJS, and JavaScript,  This project allows users to easily convert long URLs into concise and shareable short URLs.
 
 ## Dependencies
 
