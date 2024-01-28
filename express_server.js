@@ -174,7 +174,7 @@ app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
   //display proper message if the user tries to enter invalid short url ID
   if (urlDatabase[id] === undefined) {
-    res.status(404).send('<html><body><p>URL does not exist.</p></body></html>');
+    res.status(403).send('<html><body><p>URL does not exist.</p></body></html>');
     return;
   }
   if (userId !== urlDatabase[id].userID) {
@@ -194,7 +194,7 @@ app.get("/u/:id", (req, res) => {
   
   if (urlDatabase[id] === undefined) {
 
-    res.status(404).send('URL does not exist.');
+    res.status(403).send('URL does not exist.');
   }
   res.redirect(longURL);
 });
