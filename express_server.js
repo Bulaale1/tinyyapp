@@ -2,7 +2,6 @@
 // Requires / Packages
 const express = require("express");
 let cookieSession = require('cookie-session');
-const morgan = require('morgan');
 const bcrypt = require('bcrypt');
 
 const { getUserByEmail, generateRandomString } = require('./helpers');
@@ -15,7 +14,6 @@ app.set("view engine", "ejs");
 //Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('dev'));
 app.use(cookieSession({
   name:  'session',
   keys: ['tinyapp'],
