@@ -192,6 +192,7 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
   
 });
+// redirect any user with short url to its relevent long url
 app.get("/u/:id", (req, res) => {
   const id = req.params.id;
 
@@ -204,8 +205,8 @@ app.get("/u/:id", (req, res) => {
   res.redirect(longURL);
 });
 
-/*handles a POST request to '/urls'.checks if the request body contains a valid 'longURL',
-and if not, it sends an appropriate response.*/
+/*if user is not logged in, send them an appropriate message else let them shorten their urls and redirect them to 
+ /urls/${ id}*/
 
 app.post("/urls",(req, res) => {
 
