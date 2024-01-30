@@ -19,7 +19,7 @@ TinyApp is a simple URL shortening fullstack web application built with Express,
 ## Getting Started
 
 - Install all dependencies (using the `npm install` command).
-- Run the development web server using the `node express_server.js` command.
+- Run the the app using `npm start` command.
 
 ## acknowledgment
 I would like to acknowledge LHL instructors and mentors for th unwavering suggestion, feedbacks and support during the process of building this tinyapp.
