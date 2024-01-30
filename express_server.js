@@ -56,7 +56,7 @@ const users = {
 console.log(users);
 // GET /login
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { user: null });
 });
 
 // POST /login
@@ -94,7 +94,7 @@ app.post('/login', (req, res) => {
 // GET /register
 app.get('/register',(req,res)=>{
 
-  res.render('register');
+  res.render('register', { user: null });
 });
 // post/register
 app.post('/register',(req,res)=>{
@@ -139,6 +139,7 @@ app.get("/urls", (req, res) => {
   const userId = req.session.userId;
   if (!userId) {
     res.redirect('/login');
+    return;
   }
   let userURLS =  urlsForUser(userId);
   const user = users[userId];
@@ -147,6 +148,13 @@ app.get("/urls", (req, res) => {
     urls: userURLS,
   };
   res.render("urls_index", templateVars);
+});
+app.get("/", (req, res) => {
+  if (req.session.userId) {
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
+  }
 });
 // Handle GET request for "/urls/new" endpoint, rendering the "urls_new" view.
 app.get("/urls/new",(req, res) => {
@@ -170,9 +178,8 @@ app.get("/urls/:id", (req, res) => {
   const userId = req.session.userId;
   const user = users[userId];
   const id = req.params.id;
-  //display proper message if the user tries to enter invalid short url ID
   if (urlDatabase[id] === undefined) {
-    res.status(403).send('<html><body><p>URL does not exist.</p></body></html>');
+    res.status(403).send('<html><body><p>URL does not exist .</p></body></html>');
     return;
   }
   if (userId !== urlDatabase[id].userID) {
@@ -188,7 +195,7 @@ app.get("/urls/:id", (req, res) => {
 app.get("/u/:id", (req, res) => {
   const id = req.params.id;
 
-  const longURL = urlDatabase[id].longUrl;
+  const longURL = urlDatabase[id].longURL;
   
   if (urlDatabase[id] === undefined) {
 
@@ -214,7 +221,8 @@ app.post("/urls",(req, res) => {
     longURL: req.body.longURL,
     userID : userId,
   };
-  res.redirect(`/urls`);
+  console.log(urlDatabase);
+  res.redirect(`/urls/${ id}`);
 });
 //Delete function
 app.post("/urls/:id/delete",(req,res)=>{

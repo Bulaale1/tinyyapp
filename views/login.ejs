@@ -2,31 +2,35 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
+  <title>TinyApp</title>
 </head>
 
 <body>
-
+  <%- include('partials/_header')%>
   <h1>Login</h1>
 
-  <h3>New here? Visit the <a href="/register">registration page</a> instead<h3></h3>
+  <!-- <h3>New here? Visit the <a href="/register">registration page</a> instead<h3></h3> -->
 
-    <form method="POST" action="/login">
-      <label for="email">Email address</label>
-      <br>
-      <input type="email" id="email" name="email" placeholder="Enter Email ">
+  <form method="POST" action="/login">
+    <label for="email">Email address</label>
+    <br>
+    <input type="email" id="email" name="email" placeholder="Enter Email ">
 
-      <br>
-      <label for="password">Password</label>
-      <br>
-      <input type="password" id="password" name="password" placeholder="Enter password">
+    <br>
+    <label for="password">Password</label>
+    <br>
+    <input type="password" id="password" name="password" placeholder="Enter password">
 
-      <br>
+    <br>
 
-      <button type="submit">Login</button>
-    </form>
+    <button type="submit">Login</button>
+  </form>
 
 </body>
 
